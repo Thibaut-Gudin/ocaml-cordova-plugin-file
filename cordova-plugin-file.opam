@@ -1,0 +1,18 @@
+opam-version: "2.0"
+maintainer:   "Danny Willems <contact@danny-willems.be>"
+authors:       "Danny Willems <contact@danny-willems.be>"
+homepage:     "git+https://dannywillems/ocaml-cordova-plugin-file"
+bug-reports:  "git+https://dannywillems/ocaml-cordova-plugin-file/issues"
+dev-repo:     "git+https://dannywillems/ocaml-cordova-plugin-file"
+license:      "LGPL-3.0 with OCaml linking exception"
+version:      "1.1"
+description: "Binding to the file cordova plugin using gen_js_api"
+synopsis: "Binding to the file cordova plugin using gen_js_api"
+build: [[ "dune" "build" "-j" jobs "-p" name "@install" ]]
+depends: [
+  "ocaml" { >= "4.08.0"}
+  "dune" {>= "2.8"}
+  "gen_js_api"
+  "js_of_ocaml" {>= "3.8.0" & < "3.9.0"}
+  "js_of_ocaml-ppx" {>= "3.8.0" & < "3.9.0"}
+]

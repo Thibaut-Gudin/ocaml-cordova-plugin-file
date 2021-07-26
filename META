@@ -1,3 +1,0 @@
-version = "1.0"
-description = "Binding to the file cordova plugin using gen_js_api"
-archive(byte) = "cordova_file.cma"
