@@ -1,6 +1,6 @@
 # ocaml-cordova-plugin-file
 
-[![LGPL-v3 licensed](https://img.shields.io/badge/license-LGPLv3-blue.svg)](https://raw.githubusercontent.com/dannywillems/ocaml-cordova-plugin-file/master/LICENSE)
+[![LGPL-v3 licensed](https://img.shields.io/badge/license-LGPLv3-blue.svg)](https://raw.githubusercontent.com/dannywillems/ocaml-_update/README.md?pr=%2Fbesport%2Focaml-cordova-plugin-file%2Fpull%2F2cordova-plugin-file/master/LICENSE)
 [![Build Status](https://travis-ci.org/dannywillems/ocaml-cordova-plugin-file.svg?branch=master)](https://travis-ci.org/dannywillems/ocaml-cordova-plugin-file)
 
 Binding to
@@ -58,7 +58,51 @@ cordova plugin add cordova-plugin-file
 See the official documentation
 [cordova-plugin-file](https://github.com/apache/cordova-plugin-file)
 
+This plugin mainly contains string that you can see in the `.mli` file,
+but it also contains other functions from `cordova.file`.
+
+### `Cordova_file.resolve_local_file_system_url`
+
+This function allows converting URLs into a `DirectoryEntry`, but
+beware, in this library it returns a `Js_of_ocaml.File.file
+Js_of_ocaml.Js.t` value. In order to use the `Js_of_ocaml.File` plugin for the
+callback management. You can learn more about this type in the
+[Js_of_ocaml official
+website](https://ocsigen.org/js_of_ocaml/3.1.0/api/File).
+
+This function have 3 arguments: *url*, *successCallback* and
+*errorCallback*. The first argument is pretty self-explanatory, but the
+other two needs some secondary functions in order to be used properly.
+
+The `File_entry` module is used for the `successCallback` of the
+function: it contains functions that allow accessing some value linked to
+the argument of the callback like `file` that allows using the returned value
+but `resolve_local_file_system_url` into a function
+automatically executed in the success case.
+
+The `errorCallback` takes an argument of type `error`. You can for
+example use the `Cordova_file.get_error_code` function to get a code and
+an indication of what caused the error. There are 12 different *error code*s
+associated to this type:
+           1 -> *Not Found Error*
+           2 -> *Security Error*
+           3 -> *Abort Error*
+           4 -> *Not Readable Error*
+           5 -> *Encoding Error*
+           6 -> *No Modification Allowed Error*
+           7 -> *Invalid State Error*
+           8 -> *Syntax Error*
+           9 -> *Invalid Modification Error*
+           10 -> *Quota Exceeded Error*
+           11 -> *Type Mismatch Error*
+           12 -> *Path Exists Error*
+
+### `Cordova_file._FileReader`
+This function returns a new `fileReader` object from the
+`Js_of_ocaml.File` plugin. You can learn more about this object
+[here](https://ocsigen.org/js_of_ocaml/3.1.0/api/File.fileReader-c)
+
 ## TODO
 
-* Allow to use methods which are available on the device depending on the
+* Allow usage methods which are available on the device depending on the
   operating system.
