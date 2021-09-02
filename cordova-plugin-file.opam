@@ -5,7 +5,7 @@ homepage:     "git+https://github.com/dannywillems/ocaml-cordova-plugin-file"
 bug-reports:  "git+https://github.com/dannywillems/ocaml-cordova-plugin-file/issues"
 dev-repo:     "git+https://github.com/dannywillems/ocaml-cordova-plugin-file"
 license:      "LGPL-3.0 with OCaml linking exception"
-version:      "1.1"
+version:      "1.2"
 description: "Binding to the file cordova plugin using gen_js_api"
 synopsis: "Binding to the file cordova plugin using gen_js_api"
 build: [[ "dune" "build" "-j" jobs "-p" name "@install" ]]
