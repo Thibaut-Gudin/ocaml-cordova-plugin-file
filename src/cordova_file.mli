@@ -83,16 +83,72 @@ let get_error_code_exn e =
   (*Their is only 12 ""ode Error"" known*)
   | _ -> Match_failure ("cordova_file.mli", 70, 2)]
 
+type flags
+
+val flags : ?create:bool -> ?exclusive:bool -> unit -> flags
+  [@@js.builder] [@@js.verbatim_names]
+
+type directory_entry
+
+module File_writer : sig
+  type t
+
+  val write : t -> string -> unit [@@js.call]
+
+  val set_onwriteend : t -> (unit -> unit) -> unit [@@js.set]
+
+  val set_onerror : t -> (unit -> unit) -> unit [@@js.set]
+end
+
+(*TODO: À revoir, diviser ce module en un avec tt ce qui est spécifique à "file_entry et ce qui est en commun avec tt les entry"*)
 module File_entry : sig
   type t
 
-  val file : t -> (file -> unit) -> (error -> unit) -> unit [@@js.call]
+  val file :
+    t ->
+    successCallback:(file -> unit) ->
+    ?errorCallback:(error -> unit) ->
+    unit ->
+    unit
+    [@@js.call]
+
+  type file_entry
+
+  val get_file :
+    t ->
+    path:string ->
+    ?options:flags ->
+    ?successCallback:(file_entry -> unit) ->
+    ?errorCallback:(error -> unit) ->
+    unit ->
+    unit
+    [@@js.call]
+
+  val get_directory :
+    t ->
+    path:string ->
+    ?options:flags ->
+    ?successCallback:(directory_entry -> unit) ->
+    ?errorCallback:(error -> unit) ->
+    unit ->
+    unit
+    [@@js.call]
+
+  val create_writer :
+    t ->
+    successCallback:(File_writer.t -> unit) ->
+    ?errorCallback:(error -> unit) ->
+    unit ->
+    unit
+    [@@js.call]
 end
 
+(*TODO: !!! Revoir le typage, l'argumnet de successCallback est commun entre plusieurs types de entry et pas juste les 'File_entry'*)
 val resolve_local_file_system_url :
   url:string ->
   successCallback:(File_entry.t -> unit) ->
-  errorCallback:(error -> unit) ->
+  ?errorCallback:(error -> unit) ->
+  unit ->
   file
   [@@js.global "window.resolveLocalFileSystemURL"]
 
