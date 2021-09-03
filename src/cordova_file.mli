@@ -95,11 +95,13 @@ module File_writer : sig
 
   val set_onwriteend : t -> (unit -> unit) -> unit [@@js.set]
 
-  val set_onerror : t -> (unit -> unit) -> unit [@@js.set]
+  val set_onerror : t -> (error -> unit) -> unit [@@js.set]
 end
 
 module File_entry : sig
   type t
+
+  val to_url : t -> string [@@js.get "toURL"]
 
   val create_writer :
     t ->
