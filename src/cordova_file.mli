@@ -116,6 +116,15 @@ module File_entry : sig
     unit ->
     unit
     [@@js.call]
+
+  (*TODO find if a single definition is possible*)
+  val resolve_local_file_system_url :
+    url:string ->
+    successCallback:(t -> unit) ->
+    ?errorCallback:(error -> unit) ->
+    unit ->
+    file
+    [@@js.global "window.resolveLocalFileSystemURL"]
 end
 
 module Directory_entry : sig
@@ -140,8 +149,25 @@ module Directory_entry : sig
     unit ->
     unit
     [@@js.call]
+
+  (*TODO find if a single definition is possible*)
+  val resolve_local_file_system_url :
+    url:string ->
+    successCallback:(t -> unit) ->
+    ?errorCallback:(error -> unit) ->
+    unit ->
+    file
+    [@@js.global "window.resolveLocalFileSystemURL"]
 end
 
+(*
+TODO: is it possible to put all the `entry` into a single type?
+I tried to create a common type that allow to use the entry that we prefer in success callbacks
+with for exeample "DirectoryEntry entry" or "FileEntry entry" for then use `entry` to call the functions we like.
+But it never worked, if you can fixup it feel free do to it and then remove my multiple definition of resolve_local_file_system_url
+*)
+
+(*
 [@@@js.stop]
 
 type entry
@@ -160,7 +186,17 @@ let file_entry x = FileEntry x
 let directory_entry x = DirectoryEntry x]
 
 [@@@js.implem let entry_of_js = Obj.magic]
+ *)
 
+(*
+type entry =
+  | DirectoryEntry of Directory_entry.t [@js.default]
+  | FileEntry of File_entry.t [@js.default]
+[@@js.sum "kind"]
+      *)
+
+(*TODO find who to have only 1 call of this function for every type of `entry` if possible ...*)
+(*
 val resolve_local_file_system_url :
   url:string ->
   successCallback:(entry -> unit) ->
@@ -168,6 +204,7 @@ val resolve_local_file_system_url :
   unit ->
   file
   [@@js.global "window.resolveLocalFileSystemURL"]
+ *)
 
 [@@@js.stop]
 
