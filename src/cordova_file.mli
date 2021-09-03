@@ -88,8 +88,6 @@ type flags
 val flags : ?create:bool -> ?exclusive:bool -> unit -> flags
   [@@js.builder] [@@js.verbatim_names]
 
-type directory_entry
-
 module File_writer : sig
   type t
 
@@ -100,9 +98,16 @@ module File_writer : sig
   val set_onerror : t -> (unit -> unit) -> unit [@@js.set]
 end
 
-(*TODO: À revoir, diviser ce module en un avec tt ce qui est spécifique à "file_entry et ce qui est en commun avec tt les entry"*)
 module File_entry : sig
   type t
+
+  val create_writer :
+    t ->
+    successCallback:(File_writer.t -> unit) ->
+    ?errorCallback:(error -> unit) ->
+    unit ->
+    unit
+    [@@js.call]
 
   val file :
     t ->
@@ -111,14 +116,16 @@ module File_entry : sig
     unit ->
     unit
     [@@js.call]
+end
 
-  type file_entry
+module Directory_entry : sig
+  type t
 
   val get_file :
     t ->
     path:string ->
     ?options:flags ->
-    ?successCallback:(file_entry -> unit) ->
+    ?successCallback:(File_entry.t -> unit) ->
     ?errorCallback:(error -> unit) ->
     unit ->
     unit
@@ -128,25 +135,35 @@ module File_entry : sig
     t ->
     path:string ->
     ?options:flags ->
-    ?successCallback:(directory_entry -> unit) ->
-    ?errorCallback:(error -> unit) ->
-    unit ->
-    unit
-    [@@js.call]
-
-  val create_writer :
-    t ->
-    successCallback:(File_writer.t -> unit) ->
+    ?successCallback:(t -> unit) ->
     ?errorCallback:(error -> unit) ->
     unit ->
     unit
     [@@js.call]
 end
 
-(*TODO: !!! Revoir le typage, l'argumnet de successCallback est commun entre plusieurs types de entry et pas juste les 'File_entry'*)
+[@@@js.stop]
+
+type entry
+
+val file_entry : File_entry.t -> entry
+
+val directory_entry : Directory_entry.t -> entry
+
+[@@@js.start]
+
+[@@@js.implem
+type entry = DirectoryEntry of Directory_entry.t | FileEntry of File_entry.t
+
+let file_entry x = FileEntry x
+
+let directory_entry x = DirectoryEntry x]
+
+[@@@js.implem let entry_of_js = Obj.magic]
+
 val resolve_local_file_system_url :
   url:string ->
-  successCallback:(File_entry.t -> unit) ->
+  successCallback:(entry -> unit) ->
   ?errorCallback:(error -> unit) ->
   unit ->
   file
