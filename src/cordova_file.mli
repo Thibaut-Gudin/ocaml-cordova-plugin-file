@@ -44,17 +44,23 @@ type error = Js_of_ocaml.File.fileError
 
 type file = Js_of_ocaml.File.file Js_of_ocaml.Js.t
 
+type blob = Js_of_ocaml.File.blob Js_of_ocaml.Js.t
+
 [@@@js.start]
 
 [@@@js.implem type file = Js_of_ocaml.File.file Js_of_ocaml.Js.t]
 
 [@@@js.implem type error = Js_of_ocaml.File.fileError]
 
+[@@@js.implem type blob = Js_of_ocaml.File.blob Js_of_ocaml.Js.t]
+
 [@@@js.implem let file_of_js = Obj.magic]
 
 [@@@js.implem let error_of_js = Obj.magic]
 
 [@@@js.implem let error_to_js = Obj.magic]
+
+[@@@js.implem let blob_to_js = Obj.magic]
 
 val get_error_code : error -> int [@@js.get "code"]
 
@@ -91,7 +97,7 @@ val flags : ?create:bool -> ?exclusive:bool -> unit -> flags
 module File_writer : sig
   type t
 
-  val write : t -> string -> unit [@@js.call]
+  val write : t -> blob -> unit [@@js.call]
 
   val set_onwriteend : t -> (unit -> unit) -> unit [@@js.set]
 
