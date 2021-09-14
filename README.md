@@ -77,13 +77,13 @@ other two needs some secondary functions in order to be used properly.
 The `File_entry` module is used for the `successCallback` of the
 function: it contains functions that allow accessing some value linked to
 the argument of the callback like `file` that allows using the returned value
-but `resolve_local_file_system_url` into a function
+by `resolve_local_file_system_url` into a function
 automatically executed in the success case.
 
-The `errorCallback` takes an argument of type `error`. You can for
-example use the `Cordova_file.get_error_code` function to get a code and
-an indication of what caused the error. There are 12 different *error code*s
-associated to this type:
+The `errorCallback` takes an argument of type `error`. You can the
+`Cordova_file.get_error_code` function that return a code that gave an
+indication of what caused the error. There are 12 different *error
+code*s associated to this type:
            1 -> *Not Found Error*
            2 -> *Security Error*
            3 -> *Abort Error*
@@ -96,6 +96,8 @@ associated to this type:
            10 -> *Quota Exceeded Error*
            11 -> *Type Mismatch Error*
            12 -> *Path Exists Error*
+You can get the interpretation of an error code in the form of an *exn*
+object with the `Cordova_file.get_error_code_exn` function.
 
 ### `Cordova_file._FileReader`
 This function returns a new `fileReader` object from the
